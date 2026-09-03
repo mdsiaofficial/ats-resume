@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Resume</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#000000;
+    --body-text:#1f2937;
+    --muted:#4b5563;
+    --rule-strong:#1c2530;
+    --rule-light:#d6d9de;
+    --page-bg:#f3f4f6;
+    --paper:#ffffff;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{
+    margin:0;
+    padding:0;
+    background:#ffffff;
+    font-family:'Poppins', Arial, Helvetica, sans-serif;
+    color:var(--body-text);
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .page{
+    max-width:850px;
+    margin:24px auto;
+    background:var(--paper);
+    padding:36px 48px 48px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
+  }
+
+  header{ margin-bottom:14px; }
+
+  h1{
+    margin:0 0 8px 0;
+    font-size:28px;
+    font-weight:700;
+    letter-spacing:0.5px;
+    color:var(--ink);
+  }
+
+  .contact{
+    font-size:12.5px;
+    color:var(--body-text);
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px 16px;
+  }
+  .contact-item{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+  }
+  .contact-item a{ color:var(--body-text);  text-decoration:none; }
+  .contact-item a:hover{ text-decoration:underline; }
+  .contact-sep{ color:var(--rule-light); }
+
+  .header-rule{
+    border:none;
+    border-top:2px solid var(--rule-strong);
+    margin:14px 0 18px 0;
+  }
+
+  section{ margin-bottom:12px; }
+  section:last-child{ margin-bottom:0; }
+
+  h2{
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:0.7px;
+    color:var(--ink);
+    text-transform:uppercase;
+    margin:0 0 6px 0;
+    padding-bottom:3px;
+    border-bottom:1px solid var(--rule-light);
+  }
+
+  .summary{
+    font-size:12.5px;
+    line-height:1.4;
+    margin:0;
+    color:var(--body-text);
+  }
+
+  .entry{ margin-bottom:2px; }
+  .entry:last-child{ margin-bottom:0; }
+  .entry-compact{ margin-bottom:0; }
+
+  .entry-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:12px;
+  }
+
+  .entry-title{
+    font-size:12px;
+    font-weight:500;
+    color:var(--ink);
+  }
+
+  .entry-title a{
+    font-weight:500;
+    color:var(--ink);
+    text-decoration:none;
+  }
+  .entry-title a:hover{ text-decoration:underline; }
+
+  .entry-title .live{
+    font-weight:500;
+    font-size:11.5px;
+    text-decoration:underline;
+    color:var(--ink);
+    margin-left:8px;
+  }
+
+  .entry-date{
+    font-size:12px;
+    font-weight:500;
+    color:var(--muted);
+    white-space:nowrap;
+  }
+
+  .entry-sub{
+    font-size:10px;
+    color:var(--muted);
+    margin-top:1px;
+    line-height:1;
+  }
+  .entry-sub .dot{ margin:0 5px; }
+
+  .entry-tech{
+    font-size:11.5px;
+    color:var(--muted);
+    margin-top:2px;
+    font-style:italic;
+  }
+
+  .skills-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+    gap:2px 24px;
+  }
+  .skill-row{
+    font-size:12px;
+    line-height:1.45;
+    color:var(--body-text);
+  }
+  .skill-row strong{ color:var(--ink); font-weight:600; }
+
+  ul.bullets{
+    margin:4px 0 0 0;
+    padding-left:16px;
+  }
+  ul.bullets li{
+    font-size:12.5px;
+    line-height:1.35;
+    color:var(--body-text);
+    margin-bottom:2px;
+  }
+  ul.bullets li::marker{ color:var(--muted); }
+
+  .tech-line{
+    font-size:11.5px;
+    line-height:1.35;
+    margin-top:3px;
+    color:var(--muted);
+  }
+  .tech-line strong{ color:var(--ink); font-weight:600; }
+
+  ul.certs{
+    margin:0;
+    padding-left:16px;
+  }
+  ul.certs li{
+    font-size:12.5px;
+    line-height:1.4;
+    color:var(--body-text);
+    margin-bottom:4px;
+  }
+  ul.certs li strong{ color:var(--ink); font-weight:500; }
+  ul.certs li a{ color:var(--ink); font-weight:500; text-decoration:none; }
+  ul.certs li a:hover{ text-decoration:underline; }
+
+  .two-col{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0 32px;
+  }
+
+  @page{
+    size: A4;
+    margin: 12mm 14mm;
+  }
+  @media print{
+    body{ background:var(--paper); }
+    .page{
+      box-shadow:none;
+      margin:0;
+      padding:0;
+      max-width:100%;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header>
+    <h1>{{FULL_NAME}}</h1>
+    <div class="contact">
+      {{#if PHONE}}<span class="contact-item"><a href="tel:{{PHONE}}">{{PHONE}}</a></span>{{/if}}
+      <span class="contact-item"><a href="mailto:{{EMAIL}}">{{EMAIL}}</a></span>
+      {{#if LOCATION}}<span class="contact-item">{{LOCATION}}</span>{{/if}}
+      {{#if WEBSITE}}<span class="contact-item"><a href="https://{{WEBSITE}}">WEBSITE</a></span>{{/if}}
+      {{#if GITHUB}}<span class="contact-item"><a href="https://{{GITHUB}}">GITHUB</a></span>{{/if}}
+      {{#if LINKEDIN}}<span class="contact-item"><a href="https://{{LINKEDIN}}">LINKEDIN</a></span>{{/if}}
+    </div>
+    <!-- <hr class="header-rule"> -->
+  </header>
+
+  {{#if SUMMARY}}
+  <section>
+    <h2>Summary</h2>
+    <p class="summary">{{SUMMARY}}</p>
+  </section>
+  {{/if}}
+
+  {{#if EDUCATION}}
+  <section>
+    <h2>Education</h2>
+    <div class="two-col">
+      {{#each EDUCATION}}
+      <div class="entry">
+        <div class="entry-row">
+          <span class="entry-title">{{degree}}{{#if field}} in {{field}}{{/if}}</span>
+          <span class="entry-date">{{#if startYear}}{{startYear}}{{/if}}{{#if endYear}} – {{endYear}}{{/if}}</span>
+        </div>
+        <div class="entry-sub">
+          {{institution}}
+          {{#if gpa}}<span class="dot">·</span>{{gpa}}{{/if}}
+          {{#if honors}}<span class="dot">·</span>{{honors}}{{/if}}
+        </div>
+        {{#if coursework}}
+        <div class="entry-tech">Relevant coursework: {{coursework}}</div>
+        {{/if}}
+      </div>
+      {{/each}}
+    </div>
+  </section>
+  {{/if}}
+
+  {{#if SKILLS}}
+  <section>
+    <h2>Technical Skills</h2>
+    <div class="skills-grid">
+      {{#each SKILLS}}
+      <div class="skill-row"><strong>{{category}}:</strong> {{skills}}</div>
+      {{/each}}
+    </div>
+  </section>
+  {{/if}}
+
+  {{#if EXPERIENCE}}
+  <section>
+    <h2>Experience</h2>
+    {{#each EXPERIENCE}}
+    <div class="entry">
+      <div class="entry-row">
+        <span class="entry-title">{{title}}{{#if company}} — {{company}}{{/if}}</span>
+        <span class="entry-date">
+          {{startDate}}{{#if endDate}} – {{endDate}}{{/if}}{{#if current}} – Present{{/if}}
+        </span>
+      </div>
+      {{#if location}}<div class="entry-sub">{{location}}</div>{{/if}}
+      <ul class="bullets">
+        {{#each bullets}}<li>{{this}}</li>{{/each}}
+      </ul>
+      {{#if technologies}}
+      <div class="tech-line"><strong>Technologies:</strong> {{technologies}}</div>
+      {{/if}}
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+
+  {{#if PROJECTS}}
+  <section>
+    <h2>Projects</h2>
+    {{#each PROJECTS}}
+    <div class="entry">
+      <div class="entry-row">
+        <span class="entry-title">{{name}}{{#if role}} — {{role}}{{/if}}</span>
+        <span class="entry-date">
+          {{#if startDate}}{{startDate}}{{/if}}
+          {{#if link}}<a href="{{link}}" target="_blank" class="live">Live</a>{{/if}}
+        </span>
+      </div>
+      <ul class="bullets">
+        {{#each bullets}}<li>{{this}}</li>{{/each}}
+      </ul>
+      {{#if technologies}}
+      <div class="tech-line"><strong>Technologies:</strong> {{technologies}}</div>
+      {{/if}}
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+
+  {{#if CERTIFICATIONS}}
+  <section>
+    <h2>Certifications</h2>
+    <div class="two-col">
+      {{#each CERTIFICATIONS}}
+      <div class="entry">
+        <span class="entry-title">{{name}}</span>{{#if issuer}} — <span class="entry-sub">{{issuer}}</span>{{/if}}{{#if issueDate}} <span class="entry-date">({{issueDate}})</span>{{/if}}
+        {{#if credentialId}}<span class="dot">·</span>ID: {{credentialId}}{{/if}}
+      </div>
+      {{/each}}
+    </div>
+  </section>
+  {{/if}}
+
+  {{#if ACHIEVEMENTS}}
+  <section>
+    <h2>Achievements</h2>
+    <div class="two-col">
+      {{#each ACHIEVEMENTS}}
+      <div class="entry entry-compact">
+        {{#if certificate}}<span class="entry-title entry-compact"><a href="{{certificate}}" target="_blank">{{title}}</a></span>{{else}}<span class="entry-title entry-compact">{{title}}</span>{{/if}}{{#if date}} <span class="entry-date">({{date}})</span>{{/if}}
+      </div>
+      {{/each}}
+    </div>
+  </section>
+  {{/if}}
+
+  {{#if VOLUNTEER}}
+  <section>
+    <h2>Volunteer Experience</h2>
+    <div class="two-col">
+      {{#each VOLUNTEER}}
+      <div class="entry">
+        <div class="entry-row">
+          {{#if website}}<span class="entry-title"><a href="{{website}}" target="_blank">{{role}}</a></span>{{else}}<span class="entry-title">{{role}}</span>{{/if}}
+          <span class="entry-date">{{startDate}}</span>
+        </div>
+        <div class="entry-sub">{{organization}}</div>
+      </div>
+      {{/each}}
+    </div>
+  </section>
+  {{/if}}
+
+
+  {{#if PROFESSIONAL_AFFILIATIONS}}
+  <section>
+    <h2>Professional Affiliations</h2>
+    <div class="two-col">
+      {{#each PROFESSIONAL_AFFILIATIONS}}
+      <div class="entry">
+        <div class="entry-row">
+          {{#if website}}<span class="entry-title"><a href="{{website}}" target="_blank">{{organization}}</a></span>{{else}}<span class="entry-title">{{organization}}</span>{{/if}}
+          {{#if startDate}}<span class="entry-date">{{startDate}}{{#if current}} – Present{{/if}}</span>{{/if}}
+        </div>
+        {{#if role}}<div class="entry-sub">{{role}}</div>{{/if}}
+      </div>
+      {{/each}}
+    </div>
+  </section>
+  {{/if}}
+
+  {{#if PUBLICATIONS}}
+  <section>
+    <h2>Publications</h2>
+    {{#each PUBLICATIONS}}
+    <div class="entry">
+      <div class="entry-row">
+        {{#if url}}<span class="entry-title"><a href="{{url}}" target="_blank">{{title}}</a></span>{{else}}<span class="entry-title">{{title}}</span>{{/if}}
+        {{#if date}}<span class="entry-date">{{date}}</span>{{/if}}
+      </div>
+      {{#if publisher}}<div class="entry-sub">{{publisher}}</div>{{/if}}
+      {{#if description}}<p class="summary" style="margin-top:2px;font-size:12px;">{{description}}</p>{{/if}}
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+
+  {{#if LANGUAGES}}
+  <section>
+    <h2>Languages</h2>
+    <div class="skills-row" style="font-size:12.5px;line-height:1.8;">
+      {{#each LANGUAGES}}<strong>{{language}}</strong>{{#if proficiency}} ({{proficiency}}){{/if}}{{#unless @last}}, {{/unless}}{{/each}}
+    </div>
+  </section>
+  {{/if}}
+
+  {{#if REFERENCES}}
+  <section>
+    <h2>References</h2>
+    <div class="two-col">
+      {{#each REFERENCES}}
+      <div class="entry">
+        <div class="entry-title">{{name}}</div>
+        {{#if relationship}}<div class="entry-sub">{{relationship}}</div>{{/if}}
+        {{#if company}}<div class="entry-sub">{{company}}</div>{{/if}}
+        {{#if email}}<div class="entry-sub"><a href="mailto:{{email}}">{{email}}</a></div>{{/if}}
+        {{#if phone}}<div class="entry-sub"><a href="tel:{{phone}}">{{phone}}</a></div>{{/if}}
+      </div>
+      {{/each}}
+    </div>
+  </section>
+  {{/if}}
+
+  {{#if CUSTOM_SECTIONS}}
+  {{#each CUSTOM_SECTIONS}}
+  <section>
+    <h2>{{heading}}</h2>
+    {{#each items}}
+    <div class="entry">
+      <div class="entry-title">{{title}}{{#if date}}<span class="entry-date" style="font-size:11.5px;">{{date}}</span>{{/if}}</div>
+      {{#if location}}<div class="entry-sub">{{location}}</div>{{/if}}
+      {{#if description}}<p class="summary" style="margin-top:4px;font-size:12.5px;">{{description}}</p>{{/if}}
+    </div>
+    {{/each}}
+  </section>
+  {{/each}}
+  {{/if}}
+
+
+</div>
+
+</body>
+</html>

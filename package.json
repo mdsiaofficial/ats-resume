@@ -1,0 +1,27 @@
+{
+  "name": "ats-resume",
+  "version": "1.0.0",
+  "description": "Generate ATS-friendly PDF resumes from JSON data with customizable templates",
+  "main": "index.js",
+  "type": "module",
+  "bin": "./cli.js",
+  "scripts": {
+    "start": "node cli.js",
+    "generate": "node index.js"
+  },
+  "keywords": ["resume", "pdf", "ats", "cv", "generator", "resume-generator"],
+  "author": "Md Shoriful Islam Ashiq <ashiq@midgen.ai>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/username/ats-resume"
+  },
+  "bugs": {
+    "url": "https://github.com/username/ats-resume/issues"
+  },
+  "homepage": "https://github.com/username/ats-resume#readme",
+  "dependencies": {
+    "handlebars": "^4.7.9",
+    "puppeteer": "^25.9.0"
+  }
+}
