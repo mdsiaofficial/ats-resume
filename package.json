@@ -14,12 +14,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/username/ats-resume"
+    "url": "https://github.com/mdsiaofficial/ats-resume"
   },
   "bugs": {
-    "url": "https://github.com/username/ats-resume/issues"
+    "url": "https://github.com/mdsiaofficial/ats-resume/issues"
   },
-  "homepage": "https://github.com/username/ats-resume#readme",
+  "homepage": "https://github.com/mdsiaofficial/ats-resume#readme",
   "dependencies": {
     "handlebars": "^4.7.9",
     "puppeteer": "^25.9.0"
