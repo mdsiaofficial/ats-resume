@@ -1,5 +1,11 @@
 # ats-resume
 
+[![npm version](https://img.shields.io/npm/v/ats-resume.svg)](https://www.npmjs.com/package/ats-resume)
+[![downloads](https://img.shields.io/npm/dy/ats-resume.svg)](https://www.npmjs.com/package/ats-resume)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/mdsiaofficial/ats-resume/blob/main/LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://ats-resume.vervel.app/how-to-contribute.html#your-first-pull-request)
+![GitHub Repo stars](https://img.shields.io/github/stars/mdsiaofficial/ats-resume)
+
 CLI tool to generate ATS-friendly PDF resumes from JSON
 
 ## Installation
