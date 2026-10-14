@@ -5,12 +5,18 @@ export const masterData = {
     show_resume: true,
     fullName: "Md Shoriful Islam Ashiq",
     nickname: "Ashiq",
-    email: "ashiq@midgen.ai",
+    email: "ashiq@midgenlabs.com",
     phone: "+880123456789",
     location: "Dhaka, Bangladesh",
     linkedin: "linkedin.com/in/mdsiaofficial",
     github: "github.com/mdsiaofficial",
     website: "ashiq.pro.bd",
+    // Optional profile photo. Local path (resolved relative to the JSON file),
+    // absolute path, or http(s) URL. Supported: png, jpg/jpeg, webp, gif, svg.
+    // Remove or leave empty to render the resume without a photo.
+    image: "profile.png",
+    // Photo shape: "circle", "square" or "rounded". Omit for the default (circle).
+    imageShape: "square",
     titles: [
       "Software Engineer",
       "Full-Stack Developer",
