@@ -81,7 +81,7 @@ async function main() {
     const outputPath = process.cwd() + '/' + data.personalInfo.nickname + '-resume.pdf';
 
     try {
-      await generatePDF(data, outputPath);
+      await generatePDF(data, outputPath, { baseDir: dirname(filePath) });
       console.log(`Created ${data.personalInfo.nickname}-resume.pdf successfully!`);
     } catch (err) {
       console.error(`Error: Failed to generate PDF - ${err.message}`);

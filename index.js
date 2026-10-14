@@ -4,14 +4,93 @@ import { fileURLToPath } from 'url';
 import puppeteer from 'puppeteer';
 import Handlebars from 'handlebars';
 
-function escapeHtml(str) {
+// Handlebars already HTML-escapes every `{{ }}` interpolation, so pre-escaping
+// here would double-encode output (`&` -> `&amp;` -> `&amp;amp;`). Values are
+// passed through untouched and normalised for nullish input only.
+function toText(str) {
   if (str == null) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+  return String(str);
+}
+
+// Characters that may appear in an http(s) URL or a base64 data URI. Anything
+// else (quotes, angle brackets, backticks) is rejected because the value is
+// emitted into an unescaped attribute.
+function isSafeUrlChars(value) {
+  return /^[A-Za-z0-9\-._~:/?#\[\]@!$&'()*+,;=%]+$/.test(value);
+}
+
+// Photo shapes the template knows how to render. Kept as an allow-list so a
+// typo or an unexpected value can't leak into the class attribute.
+const IMAGE_SHAPES = ['circle', 'square', 'rounded'];
+const DEFAULT_IMAGE_SHAPE = 'circle';
+
+/**
+ * Maps personalInfo.imageShape onto a known shape. Accepts a few common
+ * synonyms; falls back to the default for anything unrecognised.
+ */
+export function normalizeImageShape(shape) {
+  const value = toText(shape).trim().toLowerCase();
+  if (IMAGE_SHAPES.includes(value)) return value;
+
+  switch (value) {
+    case 'round':
+    case 'circular':
+    case 'oval':
+      return 'circle';
+    case 'rect':
+    case 'rectangle':
+    case 'box':
+    case 'plain':
+      return 'square';
+    case 'rounded-corner':
+    case 'roundedcorners':
+      return 'rounded';
+    default:
+      return DEFAULT_IMAGE_SHAPE;
+  }
+}
+
+const IMAGE_MIME_TYPES = {
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.webp': 'image/webp',
+  '.gif': 'image/gif',
+  '.svg': 'image/svg+xml'
+};
+
+/**
+ * Resolves personalInfo.image into something a headless page can load.
+ * Supports remote URLs, data URIs and local files (inlined as a data URI so
+ * puppeteer's setContent has no base URL to resolve relative paths against).
+ */
+export function resolveImageSource(image, baseDir = process.cwd()) {
+  const value = toText(image).trim();
+  if (!value) return null;
+
+  if (/^https?:\/\//i.test(value) || /^data:image\//i.test(value)) {
+    return isSafeUrlChars(value) ? value : null;
+  }
+
+  if (/^[a-z][a-z0-9+.-]*:\/\//i.test(value)) {
+    return null;
+  }
+
+  const filePath = path.isAbsolute(value) ? value : path.resolve(baseDir, value);
+  const ext = path.extname(filePath).toLowerCase();
+  const mime = IMAGE_MIME_TYPES[ext];
+  if (!mime) {
+    console.warn(`Warning: Unsupported profile image type '${ext || value}'. Skipping image.`);
+    return null;
+  }
+
+  try {
+    const buffer = fs.readFileSync(filePath);
+    return `data:${mime};base64,${buffer.toString('base64')}`;
+  } catch (err) {
+    console.warn(`Warning: Could not read profile image '${value}' (${err.message}). Skipping image.`);
+    return null;
+  }
 }
 
 function hasItems(arr) {
@@ -57,37 +136,44 @@ function registerHandlebarsHelpers() {
   });
 }
 
-function transformToResumeContent(data) {
+function transformToResumeContent(data, options = {}) {
   const result = {};
 
   if (data.personalInfo) {
     const pi = data.personalInfo;
-    if (pi.fullName) result.FULL_NAME = escapeHtml(pi.fullName);
-    if (pi.nickname) result.NICKNAME = escapeHtml(pi.nickname);
-    if (pi.email) result.EMAIL = escapeHtml(pi.email);
-    if (pi.phone) result.PHONE = escapeHtml(pi.phone);
-    if (pi.location) result.LOCATION = escapeHtml(pi.location);
-    if (pi.linkedin) result.LINKEDIN = escapeHtml(pi.linkedin);
-    if (pi.github) result.GITHUB = escapeHtml(pi.github);
-    if (pi.website) result.WEBSITE = escapeHtml(pi.website);
+    if (pi.fullName) result.FULL_NAME = toText(pi.fullName);
+    const photo = resolveImageSource(pi.image, options.baseDir);
+    if (photo) {
+      // Rendered with a triple-stache: HTML-escaping would mangle base64
+      // padding and URL query separators in the src attribute.
+      result.PROFILE_IMAGE = new Handlebars.SafeString(photo);
+      result.PROFILE_IMAGE_SHAPE = normalizeImageShape(pi.imageShape);
+    }
+    if (pi.nickname) result.NICKNAME = toText(pi.nickname);
+    if (pi.email) result.EMAIL = toText(pi.email);
+    if (pi.phone) result.PHONE = toText(pi.phone);
+    if (pi.location) result.LOCATION = toText(pi.location);
+    if (pi.linkedin) result.LINKEDIN = toText(pi.linkedin);
+    if (pi.github) result.GITHUB = toText(pi.github);
+    if (pi.website) result.WEBSITE = toText(pi.website);
   }
 
   if (data.summary_resume) {
-    result.SUMMARY = escapeHtml(data.summary_resume);
+    result.SUMMARY = toText(data.summary_resume);
   }
 
   const filteredExperience = data.experience?.filter(item => item.show_resume !== false);
   if (hasItems(filteredExperience)) {
     result.EXPERIENCE = filteredExperience.map(item => ({
-      title: escapeHtml(item.title || ''),
-      company: escapeHtml(item.company || ''),
-      location: escapeHtml(item.location || ''),
-      startDate: escapeHtml(item.startDate || ''),
-      endDate: escapeHtml(item.endDate || ''),
+      title: toText(item.title || ''),
+      company: toText(item.company || ''),
+      location: toText(item.location || ''),
+      startDate: toText(item.startDate || ''),
+      endDate: toText(item.endDate || ''),
       current: item.current || false,
-      bullets: (item.bullets || []).map(b => escapeHtml(b)),
+      bullets: (item.bullets || []).map(b => toText(b)),
       technologies: Array.isArray(item.technologies) 
-        ? item.technologies.map(t => escapeHtml(t)).join(', ')
+        ? item.technologies.map(t => toText(t)).join(', ')
         : (item.technologies || '')
     }));
   }
@@ -95,15 +181,15 @@ function transformToResumeContent(data) {
   const filteredEducation = data.education?.filter(item => item.show_resume !== false);
   if (hasItems(filteredEducation)) {
     result.EDUCATION = filteredEducation.map(item => ({
-      institution: escapeHtml(item.institution || ''),
-      degree: escapeHtml(item.degree || ''),
-      field: escapeHtml(item.field || ''),
+      institution: toText(item.institution || ''),
+      degree: toText(item.degree || ''),
+      field: toText(item.field || ''),
       startYear: item.startYear,
       endYear: item.endYear,
-      gpa: escapeHtml(item.gpa || ''),
-      honors: escapeHtml(item.honors || ''),
+      gpa: toText(item.gpa || ''),
+      honors: toText(item.honors || ''),
       coursework: Array.isArray(item.coursework)
-        ? item.coursework.map(c => escapeHtml(c)).join(', ')
+        ? item.coursework.map(c => toText(c)).join(', ')
         : (item.coursework || '')
     }));
   }
@@ -112,8 +198,8 @@ function transformToResumeContent(data) {
   if (hasItems(filteredSkills)) {
     const grouped = {};
     filteredSkills.forEach(item => {
-      const category = escapeHtml(item.category || 'Other');
-      const skillName = escapeHtml(item.name || '');
+      const category = toText(item.category || 'Other');
+      const skillName = toText(item.name || '');
       if (!grouped[category]) {
         grouped[category] = [];
       }
@@ -130,99 +216,99 @@ function transformToResumeContent(data) {
   const filteredProjects = data.projects?.filter(item => item.show_resume !== false);
   if (hasItems(filteredProjects)) {
     result.PROJECTS = filteredProjects.map(item => ({
-      name: escapeHtml(item.name || ''),
-      role: escapeHtml(item.role || ''),
-      bullets: (item.bullets || []).map(b => escapeHtml(b)),
+      name: toText(item.name || ''),
+      role: toText(item.role || ''),
+      bullets: (item.bullets || []).map(b => toText(b)),
       technologies: Array.isArray(item.technologies)
-        ? item.technologies.map(t => escapeHtml(t)).join(', ')
+        ? item.technologies.map(t => toText(t)).join(', ')
         : (item.technologies || ''),
-      startDate: escapeHtml(item.startDate || ''),
-      endDate: escapeHtml(item.endDate || ''),
-      link: escapeHtml(item.link || '')
+      startDate: toText(item.startDate || ''),
+      endDate: toText(item.endDate || ''),
+      link: toText(item.link || '')
     }));
   }
 
   const filteredCertifications = data.certifications?.filter(item => item.show_resume !== false);
   if (hasItems(filteredCertifications)) {
     result.CERTIFICATIONS = filteredCertifications.map(item => ({
-      name: escapeHtml(item.name || ''),
-      issuer: escapeHtml(item.issuer || ''),
-      issueDate: escapeHtml(item.issueDate || ''),
-      credentialId: escapeHtml(item.credentialId || '')
+      name: toText(item.name || ''),
+      issuer: toText(item.issuer || ''),
+      issueDate: toText(item.issueDate || ''),
+      credentialId: toText(item.credentialId || '')
     }));
   }
 
   const filteredAchievements = data.achievements?.filter(item => item.show_resume !== false);
   if (hasItems(filteredAchievements)) {
     result.ACHIEVEMENTS = filteredAchievements.map(item => ({
-      title: escapeHtml(item.title || ''),
-      date: escapeHtml(item.date || ''),
-      certificate: escapeHtml(item.certificate || '')
+      title: toText(item.title || ''),
+      date: toText(item.date || ''),
+      certificate: toText(item.certificate || '')
     }));
   }
 
   const filteredVolunteer = data.volunteerExperience?.filter(item => item.show_resume !== false);
   if (hasItems(filteredVolunteer)) {
     result.VOLUNTEER = filteredVolunteer.map(item => ({
-      role: escapeHtml(item.role || ''),
-      organization: escapeHtml(item.organization || ''),
-      startDate: escapeHtml(item.startDate || ''),
-      website: escapeHtml(item.website || '')
+      role: toText(item.role || ''),
+      organization: toText(item.organization || ''),
+      startDate: toText(item.startDate || ''),
+      website: toText(item.website || '')
     }));
   }
 
   const filteredLanguages = data.languages?.filter(item => item.show_resume !== false);
   if (hasItems(filteredLanguages)) {
     result.LANGUAGES = filteredLanguages.map(item => ({
-      language: escapeHtml(item.language || ''),
-      proficiency: escapeHtml(item.proficiency || '')
+      language: toText(item.language || ''),
+      proficiency: toText(item.proficiency || '')
     }));
   }
 
   const filteredPublications = data.publications?.filter(item => item.show_resume !== false);
   if (hasItems(filteredPublications)) {
     result.PUBLICATIONS = filteredPublications.map(item => ({
-      title: escapeHtml(item.title || ''),
-      publisher: escapeHtml(item.publisher || ''),
-      date: escapeHtml(item.date || ''),
-      url: escapeHtml(item.url || ''),
-      description: escapeHtml(item.description || '')
+      title: toText(item.title || ''),
+      publisher: toText(item.publisher || ''),
+      date: toText(item.date || ''),
+      url: toText(item.url || ''),
+      description: toText(item.description || '')
     }));
   }
 
   const filteredAffiliations = data.professionalAffiliations?.filter(item => item.show_resume !== false);
   if (hasItems(filteredAffiliations)) {
     result.PROFESSIONAL_AFFILIATIONS = filteredAffiliations.map(item => ({
-      organization: escapeHtml(item.organization || ''),
-      role: escapeHtml(item.role || ''),
-      startDate: escapeHtml(item.startDate || ''),
+      organization: toText(item.organization || ''),
+      role: toText(item.role || ''),
+      startDate: toText(item.startDate || ''),
       current: item.current || false,
-      website: escapeHtml(item.website || '')
+      website: toText(item.website || '')
     }));
   }
 
   const filteredReferences = data.references?.filter(item => item.show_resume !== false);
   if (hasItems(filteredReferences)) {
     result.REFERENCES = filteredReferences.map(item => ({
-      name: escapeHtml(item.name || ''),
-      relationship: escapeHtml(item.relationship || ''),
-      company: escapeHtml(item.company || ''),
-      email: escapeHtml(item.email || ''),
-      phone: escapeHtml(item.phone || '')
+      name: toText(item.name || ''),
+      relationship: toText(item.relationship || ''),
+      company: toText(item.company || ''),
+      email: toText(item.email || ''),
+      phone: toText(item.phone || '')
     }));
   }
 
   const filteredCustomSections = data.customSections?.filter(item => item.show_resume !== false);
   if (hasItems(filteredCustomSections)) {
     const mapped = filteredCustomSections.map(section => ({
-      heading: escapeHtml(section.heading || ''),
+      heading: toText(section.heading || ''),
       items: (section.items || [])
         .filter(item => item.show_resume !== false)
         .map(item => ({
-          title: escapeHtml(item.title || ''),
-          date: escapeHtml(item.date || ''),
-          location: escapeHtml(item.location || ''),
-          description: escapeHtml(item.description || '')
+          title: toText(item.title || ''),
+          date: toText(item.date || ''),
+          location: toText(item.location || ''),
+          description: toText(item.description || '')
         }))
     })).filter(section => hasItems(section.items));
     if (hasItems(mapped)) {
@@ -264,9 +350,9 @@ function getTemplatePath() {
   return localPath;
 }
 
-export async function generatePDF(data, outputPath) {
-  const resumeContent = transformToResumeContent(data);
-  const templatePath = getTemplatePath();
+export async function generatePDF(data, outputPath, options = {}) {
+  const resumeContent = transformToResumeContent(data, options);
+  const templatePath = options.templatePath || getTemplatePath();
   const templateHtml = fs.readFileSync(templatePath, 'utf-8');
 
   registerHandlebarsHelpers();
@@ -282,6 +368,22 @@ export async function generatePDF(data, outputPath) {
   try {
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: 'networkidle0' });
+
+    // Ensure the profile photo is decoded before printing, and drop it entirely
+    // if the source is unreachable so the header falls back to the no-photo layout.
+    await page.evaluate(async () => {
+      const header = document.querySelector('header.header-with-photo');
+      const img = header && header.querySelector('.profile-photo img');
+      if (!header || !img) return;
+      try {
+        if (!img.complete) await img.decode();
+        if (!img.naturalWidth) throw new Error('image failed to load');
+      } catch {
+        header.classList.remove('header-with-photo');
+        const photo = header.querySelector('.profile-photo');
+        if (photo) photo.remove();
+      }
+    });
 
     await page.pdf({
       path: outputPath,
@@ -307,4 +409,9 @@ async function main() {
   await generatePDF(masterData, 'resume.pdf');
 }
 
-main().catch(console.error);
+// Only self-run when executed directly, so importing generatePDF from cli.js
+// does not trigger an extra PDF build.
+const isDirectRun = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isDirectRun) {
+  main().catch(console.error);
+}

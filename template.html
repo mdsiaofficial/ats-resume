@@ -36,7 +36,39 @@
     box-shadow:0 1px 3px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
   }
 
-  header{ margin-bottom:14px; }
+  header{
+    margin-bottom:14px;
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:24px;
+  }
+
+  .header-main{ flex:1 1 auto; min-width:0; }
+
+  .profile-photo{
+    flex:0 0 auto;
+    width:96px;
+    height:96px;
+    overflow:hidden;
+    border:1px solid var(--rule-light);
+    background:var(--page-bg);
+  }
+  .profile-photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  /* Square keeps the default rect frame; only the clipping changes per shape. */
+  .profile-photo.shape-square{ border-radius:0; }
+  .profile-photo.shape-rounded{ border-radius:8px; }
+  /* A circle reads small at the same box size, so it gets a slight bump. */
+  .profile-photo.shape-circle{
+    border-radius:50%;
+    width:104px;
+    height:104px;
+  }
 
   h1{
     margin:0 0 8px 0;
@@ -52,6 +84,18 @@
     display:flex;
     flex-wrap:wrap;
     gap:6px 16px;
+  }
+  /* With a photo the header loses horizontal room, so contacts wrap onto two rows. */
+  .header-with-photo .contact{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:6px 20px;
+  }
+  .header-with-photo .contact-item{ min-width:0; }
+  .header-with-photo .contact-item span,
+  .header-with-photo .contact-item a{
+    overflow-wrap:anywhere;
+    word-break:break-word;
   }
   .contact-item{
     display:inline-flex;
@@ -214,7 +258,8 @@
 
 <div class="page">
 
-  <header>
+  <header{{#if PROFILE_IMAGE}} class="header-with-photo"{{/if}}>
+    <div class="header-main">
     <h1>{{FULL_NAME}}</h1>
     <div class="contact">
       {{#if PHONE}}<span class="contact-item"><a href="tel:{{PHONE}}">{{PHONE}}</a></span>{{/if}}
@@ -225,6 +270,12 @@
       {{#if LINKEDIN}}<span class="contact-item"><a href="https://{{LINKEDIN}}">LINKEDIN</a></span>{{/if}}
     </div>
     <!-- <hr class="header-rule"> -->
+    </div>
+    {{#if PROFILE_IMAGE}}
+    <div class="profile-photo shape-{{PROFILE_IMAGE_SHAPE}}">
+      <img src="{{PROFILE_IMAGE}}" alt="">
+    </div>
+    {{/if}}
   </header>
 
   {{#if SUMMARY}}
