@@ -6,7 +6,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://ats-resume.vervel.app/how-to-contribute.html#your-first-pull-request)
 ![GitHub Repo stars](https://img.shields.io/github/stars/mdsiaofficial/ats-resume)
 
-CLI tool to generate ATS-friendly PDF resumes from JSON
+CLI tool to generate ATS-friendly PDF resumes from JSON/JSONC data
 
 ## Installation
 
@@ -17,25 +17,73 @@ npm install -g ats-resume
 ## Usage
 
 ```bash
-ats-resume --json        # Create demo JSON
-ats-resume --create      # Generate PDF from demo JSON
-ats-resume --create custom.json  # Generate PDF from custom JSON file
+ats-resume --json                 # Create demo-resume.jsonc template
+ats-resume --create               # Generate PDF from the demo data file
+ats-resume --create custom.jsonc  # Generate PDF from a custom data file
 ```
+
+### Which data file is used
+
+- With an explicit argument, that file is used. Relative paths are resolved
+  against the current directory and absolute paths are accepted as given
+  (e.g. `ats-resume --create /tmp/my-resume.jsonc`).
+- Without an argument, `demo-resume.jsonc` is preferred. If only the legacy
+  `demo-resume.json` exists, it is used instead and a note is printed.
+- A `.json` file works exactly like a `.jsonc` file.
+
+## Data file format
+
+The resume data lives in a `.jsonc` file — JSON with comments. Both `.json` and
+`.jsonc` files are accepted, and a plain `.json` file keeps working unchanged.
+
+In a `.jsonc` file you may use:
+
+- `//` line comments
+- `/* ... */` block comments
+- trailing commas before `}` or `]`
+
+```jsonc
+{
+  // The name printed at the top of the resume
+  "personalInfo": {
+    "fullName": "Jane Doe",
+    "nickname": "jane",
+    "email": "jane@example.com",
+    // Optional profile photo
+    "image": "./photo.png",
+    "imageShape": "square"
+  },
+
+  /* Work history. Set "show_resume": false to hide an entry from the PDF. */
+  "experience": [
+    {
+      "title": "Software Engineer",
+      "company": "Example Inc",
+      "startDate": "Jan 2024",
+      "current": true,
+    },
+  ],
+}
+```
+
+Any entry with `"show_resume": false` is excluded from the generated PDF, and
+sections you do not need can simply be deleted.
 
 ## Features
 
-- Generate ATS-friendly PDF resumes from JSON data
+- Generate ATS-friendly PDF resumes from JSON/JSONC data
 - Customizable templates with Handlebars
-- Demo JSON generation for quick start
-- Support for custom JSON input files
+- Demo JSONC generation for quick start
+- Support for custom JSON/JSONC input files
+- Comments in the data file
 - Optional profile photo in the top-right corner of the header
 - Professional, clean output formatting
 
 ## Profile photo
 
-Add an optional `image` field to `personalInfo` in your JSON:
+Add an optional `image` field to `personalInfo` in your data file:
 
-```json
+```jsonc
 {
   "personalInfo": {
     "fullName": "Jane Doe",
@@ -46,7 +94,7 @@ Add an optional `image` field to `personalInfo` in your JSON:
 }
 ```
 
-- Accepts a local path (relative to the JSON file, or absolute), an `https://` URL, or a `data:` URI.
+- Accepts a local path (relative to the data file, or absolute), an `https://` URL, or a `data:` URI.
 - Supported formats: `.png`, `.jpg`, `.jpeg`, `.webp`, `.gif`, `.svg`.
 - The photo is rendered in the top-right corner, and the contact details wrap into two rows to fit.
 - Local files are inlined into the PDF, so the resume can still be built from another working directory.

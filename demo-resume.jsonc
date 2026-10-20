@@ -1,8 +1,14 @@
+// Resume data for ats-resume.
+//
+// This file contains every possible resume field - delete the sections you don't need.
+// Comments are allowed here: use // for a line comment and /* ... */ for a block comment.
+// Set "show_resume": false on an entry to exclude it from the generated PDF.
 {
-  "_NOTE": "Delete this field when editing. JSON doesn't keep comments. This file has all possible resume fields - remove sections you don't need. Fields with show_resume: false will be excluded from PDF.",
   "personalInfo": {
     "show_portfolio": true,
     "show_resume": true,
+    // "label" shows WEBSITE/GITHUB/LINKEDIN, "url" shows the actual link text
+    "headerLinkStyle": "url",
     "fullName": "Md Shoriful Islam Ashiq",
     "nickname": "Ashiq",
     "email": "ashiq@midgenlabs.com",
@@ -11,7 +17,9 @@
     "linkedin": "linkedin.com/in/mdsiaofficial",
     "github": "github.com/mdsiaofficial",
     "website": "ashiq.pro.bd",
+    // Optional profile photo: local path, https:// URL or data: URI
     "image": "profile.png",
+    // Photo shape: "circle", "square" or "rounded"
     "imageShape": "square",
     "titles": [
       "Software Engineer",
@@ -22,6 +30,7 @@
   },
   "summary_portfolio": "Software Engineer passionate about building production-ready applications, scaling systems, and driving business growth through technology and clean engineering practices.",
   "summary_resume": "Software Engineer with experience building scalable web applications using React, Next.js, and Node.js. Passionate about clean code, system design, and continuous learning. Adept at collaborating with cross-functional teams to deliver enterprise solutions.",
+  // Work experience. Set "show_resume": false on an entry to hide it from the PDF.
   "experience": [
     {
       "show_portfolio": true,
@@ -91,6 +100,7 @@
       "impact": "Contributed to the development of production-ready applications using React, Node.js."
     }
   ],
+  // Education entries. Set "show_resume": false on an entry to hide it from the PDF.
   "education": [
     {
       "show_portfolio": true,
@@ -103,16 +113,37 @@
       "gpa": "3.49"
     },
     {
-      "show_portfolio": true,
-      "show_resume": true,
+      "show_portfolio": false,
+      "show_resume": false,
       "institution": "Govt Bangla College",
       "degree": "B.Sc.",
       "field": "Mathematics",
       "startYear": 2018,
       "endYear": 2022,
-      "gpa": "3.10"
+      "gpa": ""
+    },
+    {
+      "show_portfolio": false,
+      "show_resume": false,
+      "institution": "BPATC School and College",
+      "degree": "HSC",
+      "field": "Science",
+      "startYear": 2016,
+      "endYear": 2018,
+      "gpa": "4.33"
+    },
+    {
+      "show_portfolio": false,
+      "show_resume": false,
+      "institution": "Radio Colony Model School",
+      "degree": "SSC",
+      "field": "Science",
+      "startYear": 2014,
+      "endYear": 2016,
+      "gpa": "4.89"
     }
   ],
+  // Skills, grouped by category. Set "show_resume": false on an entry to hide it from the PDF.
   "skills": [
     {
       "show_portfolio": true,
@@ -120,6 +151,7 @@
       "name": "TypeScript",
       "category": "languages",
       "description": "My go-to for anything beyond simple scripts. I use it for full-stack type safety — from Next.js frontends to Node.js APIs. Types catch bugs before they reach production.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "CPCCU Portal",
         "Code Studio apps",
@@ -132,6 +164,7 @@
       "name": "JavaScript (ES6+)",
       "category": "languages",
       "description": "The foundation of everything I build. Deep understanding of closures, event loop, async/await, destructuring, modules, and prototypal inheritance.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "Every web project I've shipped"
       ]
@@ -142,6 +175,7 @@
       "name": "C++",
       "category": "languages",
       "description": "Used primarily for competitive programming. Comfortable with STL, templates, recursion, dynamic programming, and graph algorithms. Solved 500+ problems across LeetCode and Codeforces.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "ICPC 2022–2025",
         "Meta Hacker Cup 2023–2024"
@@ -153,6 +187,7 @@
       "name": "HTML5",
       "category": "languages",
       "description": "Accessible, SEO-friendly markup. I use semantic elements, ARIA labels, and structured data where it matters.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "All frontend projects"
       ]
@@ -163,6 +198,7 @@
       "name": "CSS3 / SASS",
       "category": "languages",
       "description": "Modern layout techniques — Flexbox, Grid, custom properties, animations. I write modular, maintainable stylesheets before reaching for utility frameworks.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "All frontend projects"
       ]
@@ -173,6 +209,7 @@
       "name": "React",
       "category": "frontend",
       "description": "Built production apps with hooks, context, custom hooks, lazy loading, and component composition patterns. Comfortable with class components but prefer functional patterns.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "CPCCU Portal",
         "Book Store MERN",
@@ -186,6 +223,7 @@
       "name": "Next.js",
       "category": "frontend",
       "description": "My primary framework for React apps. I use App Router, Server Components, API routes, ISR, SSR, and middleware. Handles routing, data fetching, and deployment in one stack.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "Code Studio enterprise apps",
         "This portfolio"
@@ -197,6 +235,7 @@
       "name": "Tailwind CSS",
       "category": "frontend",
       "description": "Utility-first styling for rapid UI development. I write custom theme extensions, responsive variants, and component-level utilities. Faster than writing custom CSS from scratch.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "All recent projects"
       ]
@@ -207,6 +246,7 @@
       "name": "Framer Motion",
       "category": "frontend",
       "description": "Declarative animations for React — page transitions, scroll-triggered effects, layout animations, and gesture-based interactions.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "This portfolio",
         "CPCCU Portal"
@@ -218,6 +258,7 @@
       "name": "React Router",
       "category": "frontend",
       "description": "Client-side routing with nested routes, dynamic segments, loaders, and navigation guards.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "React Router Demo",
         "Library Management System"
@@ -229,6 +270,7 @@
       "name": "Node.js",
       "category": "backend",
       "description": "Server-side JavaScript for REST APIs, real-time features, background jobs, and file processing. I use the event-driven model for non-blocking I/O.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "CPCCU Portal backend",
         "Book Store MERN API",
@@ -241,6 +283,7 @@
       "name": "Express.js",
       "category": "backend",
       "description": "Lightweight routing and middleware framework. I structure APIs with route modules, error handling middleware, authentication guards, and input validation.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "Book Store"
       ]
@@ -251,6 +294,7 @@
       "name": "Hono.js",
       "category": "backend",
       "description": "Ultra-fast, lightweight web framework of Bun runtime (a native js/ts runtime) for edge runtimes and Node.js. I use it for building type-safe APIs with a Express-like feel but significantly better performance and TypeScript support.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "API prototyping",
         "Edge functions"
@@ -262,6 +306,7 @@
       "name": "REST API Design",
       "category": "backend",
       "description": "Designing clean, consistent RESTful APIs — proper HTTP methods, status codes, pagination, filtering, versioning, and error response formats.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "All backend projects"
       ]
@@ -272,6 +317,7 @@
       "name": "EJS Templates",
       "category": "backend",
       "description": "Server-side HTML templating with Embedded JavaScript. I use it for dynamic page rendering, email templates, and generating markup with logic directly in the view layer.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "Server-rendered pages",
         "Email templating"
@@ -283,6 +329,7 @@
       "name": "Authentication & Authorization",
       "category": "backend",
       "description": "JWT-based auth, session management, OAuth flows, role-based access control, and password hashing with bcrypt.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "Book Store MERN",
         "CRUD App MERN"
@@ -294,6 +341,7 @@
       "name": "MongoDB",
       "category": "databases",
       "description": "NoSQL document database for flexible schemas. I use Mongoose ODM, aggregation pipelines, indexing for performance, and embedded vs. referenced document patterns.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "CPCCU Portal",
         "Book Store MERN",
@@ -306,6 +354,7 @@
       "name": "PostgreSQL",
       "category": "databases",
       "description": "Relational database for structured data and complex queries. I use it when data integrity and ACID compliance matter — transactions, joins, and foreign keys.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "Code Studio enterprise apps"
       ]
@@ -316,6 +365,7 @@
       "name": "MySQL",
       "category": "databases",
       "description": "Used at Code Studio for existing enterprise schemas. Comfortable with queries, indexing, normalization, and stored procedures.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "Code Studio apps"
       ]
@@ -326,6 +376,7 @@
       "name": "Git",
       "category": "devops",
       "description": "Version control for everything. I use feature branches, interactive rebase, cherry-pick, bisect for debugging, and conventional commit messages.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "Every project"
       ]
@@ -336,6 +387,7 @@
       "name": "GitHub Actions",
       "category": "devops",
       "description": "CI/CD pipelines for automated testing, linting, building, and deployment. I set up workflows for PR checks and production deploys.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "CPCCU Portal CI/CD",
         "Portfolio auto-deploy"
@@ -347,6 +399,7 @@
       "name": "Docker",
       "category": "devops",
       "description": "Containerizing apps for consistent environments. I write Dockerfiles, docker-compose for multi-service setups, and use it to onboard new devs quickly.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "Code Studio dev environments"
       ]
@@ -357,6 +410,7 @@
       "name": "Vercel",
       "category": "devops",
       "description": "Zero-config deployments for Next.js apps. I use preview deployments for PRs, environment variables, edge functions, and domain configuration.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "This portfolio",
         "All Vercel-hosted projects"
@@ -368,6 +422,7 @@
       "name": "Linux / CLI",
       "category": "devops",
       "description": "Comfortable working in terminal — bash scripting, SSH, process management, file operations, and server administration.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "All server-side work"
       ]
@@ -378,6 +433,7 @@
       "name": "VS Code",
       "category": "tools",
       "description": "Primary IDE with a curated extension setup — ESLint, Prettier, GitLens, Tailwind IntelliSense, and Copilot. Custom keybindings for productivity.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "Daily driver for all development"
       ]
@@ -388,6 +444,7 @@
       "name": "Cursor",
       "category": "tools",
       "description": "AI-powered code editor. I use it for rapid prototyping, codebase-aware suggestions, and refactoring with natural language prompts.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "Side projects and experimentation"
       ]
@@ -398,6 +455,7 @@
       "name": "Claude Code",
       "category": "tools",
       "description": "AI assistant for development — debugging complex issues, generating boilerplate, writing tests, and exploring unfamiliar codebases.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "Used across multiple projects"
       ]
@@ -408,6 +466,7 @@
       "name": "OpenCode",
       "category": "tools",
       "description": "AI coding agent for agentic development workflows. I use it for multi-step tasks, codebase exploration, and autonomous feature implementation with tool orchestration.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "This portfolio",
         "Rapid prototyping"
@@ -419,6 +478,7 @@
       "name": "Codex",
       "category": "tools",
       "description": "OpenAI's coding agent for autonomous software engineering tasks. I use it for code generation, refactoring, and tackling complex engineering problems with contextual understanding.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "Feature development",
         "Codebase maintenance"
@@ -430,6 +490,7 @@
       "name": "Postman",
       "category": "tools",
       "description": "API testing and documentation. I use collections, environments, and automated test scripts for backend development.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "All API development"
       ]
@@ -440,6 +501,7 @@
       "name": "Figma",
       "category": "tools",
       "description": "Reading design files and translating them to code. I use it to inspect spacing, colors, typography, and component structure.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "All client-facing projects"
       ]
@@ -450,6 +512,7 @@
       "name": "Responsive Design",
       "category": "design",
       "description": "Mobile-first approach with breakpoints, fluid typography, and adaptive layouts. Every project I build works across all screen sizes.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "All web projects"
       ]
@@ -460,6 +523,7 @@
       "name": "UI/UX Principles",
       "category": "design",
       "description": "Understanding of visual hierarchy, contrast, spacing, affordances, and user flow. I build interfaces that are intuitive before they're beautiful.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "All projects"
       ]
@@ -470,6 +534,7 @@
       "name": "Component Design Systems",
       "category": "design",
       "description": "Building reusable, composable component libraries. I focus on consistent props, variants, and accessibility from the start.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "CPCCU Portal",
         "Code Studio apps"
@@ -481,6 +546,7 @@
       "name": "Data Structures & Algorithms",
       "category": "competitiveProgramming",
       "description": "Arrays, linked lists, trees, graphs, hash maps, heaps, stacks, queues. Algorithm paradigms — divide and conquer, greedy, dynamic programming, backtracking.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "ICPC 2022–2025",
         "Meta Hacker Cup 2023–2024",
@@ -493,6 +559,7 @@
       "name": "Problem Solving",
       "category": "competitiveProgramming",
       "description": "Breaking down complex problems into smaller subproblems. Strong pattern recognition for common problem types — sliding window, two pointers, BFS/DFS, topological sort.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "Competitive programming contests"
       ]
@@ -503,12 +570,14 @@
       "name": "Contest Strategy",
       "category": "competitiveProgramming",
       "description": "Time management during contests, quick prototyping, identifying easy/medium/hard problems, and knowing when to move on.",
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
       "projects": [
         "ICPC regional rounds",
         "Meta Hacker Cup rounds"
       ]
     }
   ],
+  // Certifications. Set "show_resume": false on an entry to hide it from the PDF.
   "certifications": [
     {
       "show_portfolio": true,
@@ -520,6 +589,7 @@
       "certificate": "https://i.ibb.co/BPsWXxb/Md-Shoriful-Islam-Java-Script-Essen-certificate.png"
     }
   ],
+  // Projects. Set "show_resume": false on an entry to hide it from the PDF.
   "projects": [
     {
       "show_portfolio": false,
@@ -912,6 +982,7 @@
       "architecture": "Full Stack"
     }
   ],
+  // Achievements and awards. Set "show_resume": false on an entry to hide it from the PDF.
   "achievements": [
     {
       "show_portfolio": true,
@@ -990,6 +1061,7 @@
       "certificate": "https://i.ibb.co/pQYDWPx/cupc2022.png"
     }
   ],
+  // Volunteer experience. Set "show_resume": false on an entry to hide it from the PDF.
   "volunteerExperience": [
     {
       "show_portfolio": true,
@@ -1064,6 +1136,7 @@
       "image": "https://i.ibb.co/74Cx1KX/icpc.png"
     }
   ],
+  // Languages and proficiency. Set "show_resume": false on an entry to hide it from the PDF.
   "languages": [
     {
       "show_portfolio": true,
@@ -1078,6 +1151,7 @@
       "proficiency": "Professional Working"
     }
   ],
+  // Professional affiliations. Set "show_resume": false on an entry to hide it from the PDF.
   "professionalAffiliations": [
     {
       "show_portfolio": false,
@@ -1089,6 +1163,7 @@
       "website": "https://www.basis.org.bd/"
     }
   ],
+  // Publications. Set "show_resume": false on an entry to hide it from the PDF.
   "publications": [
     {
       "show_portfolio": false,
@@ -1100,6 +1175,7 @@
       "description": "A comprehensive guide on building production-ready applications using modern web technologies."
     }
   ],
+  // References. Set "show_resume": false on entry to hide it from the PDF.
   "references": [
     {
       "show_portfolio": false,
@@ -1126,6 +1202,7 @@
       "email": "taher@midgen.ai"
     }
   ],
+  // Social links shown in the header.
   "socialLinks": {
     "linkedin": "https://linkedin.com/in/mdsiaofficial",
     "github": "https://github.com/mdsiaofficial",

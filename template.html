@@ -49,7 +49,7 @@
   .profile-photo{
     flex:0 0 auto;
     width:96px;
-    height:96px;
+    height:116px;
     overflow:hidden;
     border:1px solid var(--rule-light);
     background:var(--page-bg);
@@ -265,9 +265,9 @@
       {{#if PHONE}}<span class="contact-item"><a href="tel:{{PHONE}}">{{PHONE}}</a></span>{{/if}}
       <span class="contact-item"><a href="mailto:{{EMAIL}}">{{EMAIL}}</a></span>
       {{#if LOCATION}}<span class="contact-item">{{LOCATION}}</span>{{/if}}
-      {{#if WEBSITE}}<span class="contact-item"><a href="https://{{WEBSITE}}">WEBSITE</a></span>{{/if}}
-      {{#if GITHUB}}<span class="contact-item"><a href="https://{{GITHUB}}">GITHUB</a></span>{{/if}}
-      {{#if LINKEDIN}}<span class="contact-item"><a href="https://{{LINKEDIN}}">LINKEDIN</a></span>{{/if}}
+      {{#if WEBSITE}}<span class="contact-item"><a href="https://{{WEBSITE}}">{{WEBSITE_TEXT}}</a></span>{{/if}}
+      {{#if GITHUB}}<span class="contact-item"><a href="https://{{GITHUB}}">{{GITHUB_TEXT}}</a></span>{{/if}}
+      {{#if LINKEDIN}}<span class="contact-item"><a href="https://{{LINKEDIN}}">{{LINKEDIN_TEXT}}</a></span>{{/if}}
     </div>
     <!-- <hr class="header-rule"> -->
     </div>
@@ -282,6 +282,40 @@
   <section>
     <h2>Summary</h2>
     <p class="summary">{{SUMMARY}}</p>
+  </section>
+  {{/if}}
+
+  {{#if EXPERIENCE}}
+  <section>
+    <h2>Experience</h2>
+    {{#each EXPERIENCE}}
+    <div class="entry">
+      <div class="entry-row">
+        <span class="entry-title">{{title}}{{#if company}} — {{company}}{{/if}}</span>
+        <span class="entry-date">
+          {{startDate}}{{#if endDate}} – {{endDate}}{{/if}}{{#if current}} – Present{{/if}}
+        </span>
+      </div>
+      {{#if location}}<div class="entry-sub">{{location}}</div>{{/if}}
+      <ul class="bullets">
+        {{#each bullets}}<li>{{this}}</li>{{/each}}
+      </ul>
+      {{#if technologies}}
+      <div class="tech-line"><strong>Technologies:</strong> {{technologies}}</div>
+      {{/if}}
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+
+  {{#if SKILLS}}
+  <section>
+    <h2>Technical Skills</h2>
+    <div class="skills-grid">
+      {{#each SKILLS}}
+      <div class="skill-row"><strong>{{category}}:</strong> {{skills}}</div>
+      {{/each}}
+    </div>
   </section>
   {{/if}}
 
@@ -306,40 +340,6 @@
       </div>
       {{/each}}
     </div>
-  </section>
-  {{/if}}
-
-  {{#if SKILLS}}
-  <section>
-    <h2>Technical Skills</h2>
-    <div class="skills-grid">
-      {{#each SKILLS}}
-      <div class="skill-row"><strong>{{category}}:</strong> {{skills}}</div>
-      {{/each}}
-    </div>
-  </section>
-  {{/if}}
-
-  {{#if EXPERIENCE}}
-  <section>
-    <h2>Experience</h2>
-    {{#each EXPERIENCE}}
-    <div class="entry">
-      <div class="entry-row">
-        <span class="entry-title">{{title}}{{#if company}} — {{company}}{{/if}}</span>
-        <span class="entry-date">
-          {{startDate}}{{#if endDate}} – {{endDate}}{{/if}}{{#if current}} – Present{{/if}}
-        </span>
-      </div>
-      {{#if location}}<div class="entry-sub">{{location}}</div>{{/if}}
-      <ul class="bullets">
-        {{#each bullets}}<li>{{this}}</li>{{/each}}
-      </ul>
-      {{#if technologies}}
-      <div class="tech-line"><strong>Technologies:</strong> {{technologies}}</div>
-      {{/if}}
-    </div>
-    {{/each}}
   </section>
   {{/if}}
 

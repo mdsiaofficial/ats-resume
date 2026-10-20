@@ -3,6 +3,9 @@ export const masterData = {
   personalInfo: {
     show_portfolio: true,
     show_resume: true,
+    // "label" shows names (WEBSITE, GITHUB, LINKEDIN) in header,
+    // "url" shows the actual link text (e.g. ashiq.pro.bd, github.com/...)
+    headerLinkStyle: "label",
     fullName: "Md Shoriful Islam Ashiq",
     nickname: "Ashiq",
     email: "ashiq@midgenlabs.com",
@@ -96,15 +99,35 @@ export const masterData = {
       gpa: "3.49",
     },
     {
-      show_portfolio: true,
-      show_resume: true,
-      institution: "Govt Bangla College",
-      degree: "B.Sc.",
-      field: "Mathematics",
-      startYear: 2018,
-      endYear: 2022,
-      gpa: "3.10",
+      "show_portfolio": false,
+      "show_resume": false,
+      "institution": "Govt Bangla College",
+      "degree": "B.Sc.",
+      "field": "Mathematics",
+      "startYear": 2018,
+      "endYear": 2022,
+      "gpa": ""
     },
+    {
+      "show_portfolio": true,
+      "show_resume": true,
+      "institution": "BPATC School and College",
+      "degree": "HSC",
+      "field": "Science",
+      "startYear": 2016,
+      "endYear": 2018,
+      "gpa": "4.33"
+    },
+    {
+      "show_portfolio": true,
+      "show_resume": true,
+      "institution": "Radio Colony Model School",
+      "degree": "SSC",
+      "field": "Science",
+      "startYear": 2014,
+      "endYear": 2016,
+      "gpa": "4.89"
+    }
   ],
   skills: [
     {

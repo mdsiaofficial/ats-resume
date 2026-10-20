@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import puppeteer from 'puppeteer';
 import Handlebars from 'handlebars';
+import { parseJsonc } from './jsonc.js';
 
 // Handlebars already HTML-escapes every `{{ }}` interpolation, so pre-escaping
 // here would double-encode output (`&` -> `&amp;` -> `&amp;amp;`). Values are
@@ -156,6 +157,14 @@ function transformToResumeContent(data, options = {}) {
     if (pi.linkedin) result.LINKEDIN = toText(pi.linkedin);
     if (pi.github) result.GITHUB = toText(pi.github);
     if (pi.website) result.WEBSITE = toText(pi.website);
+
+    // headerLinkStyle: "label" shows names (WEBSITE, GITHUB, LINKEDIN),
+    //                  "url" shows the actual URL text (e.g. ashiq.pro.bd)
+    const linkStyle = toText(pi.headerLinkStyle || 'label').trim().toLowerCase();
+    const showUrl = linkStyle === 'url';
+    result.WEBSITE_TEXT = showUrl && pi.website ? toText(pi.website) : 'WEBSITE';
+    result.GITHUB_TEXT = showUrl && pi.github ? toText(pi.github) : 'GITHUB';
+    result.LINKEDIN_TEXT = showUrl && pi.linkedin ? toText(pi.linkedin) : 'LINKEDIN';
   }
 
   if (data.summary_resume) {
@@ -367,11 +376,19 @@ export async function generatePDF(data, outputPath, options = {}) {
 
   try {
     const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0' });
+    // 'load' instead of 'networkidle0': the remote Google Fonts request combined
+    // with a large inlined photo makes the network-idle window unreliable, so
+    // waiting on it intermittently times out and no PDF is produced.
+    await page.setContent(html, { waitUntil: 'load' });
 
-    // Ensure the profile photo is decoded before printing, and drop it entirely
-    // if the source is unreachable so the header falls back to the no-photo layout.
+    // Ensure webfonts and the profile photo are decoded before printing, and drop
+    // the photo entirely if the source is unreachable so the header falls back to
+    // the no-photo layout.
     await page.evaluate(async () => {
+      if (document.fonts && document.fonts.ready) {
+        await document.fonts.ready;
+      }
+
       const header = document.querySelector('header.header-with-photo');
       const img = header && header.querySelector('.profile-photo img');
       if (!header || !img) return;
@@ -404,14 +421,31 @@ export async function generatePDF(data, outputPath, options = {}) {
 async function main() {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
-  const dataPath = path.join(__dirname, 'demo-resume.json');
-  const masterData = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
-  await generatePDF(masterData, 'resume.pdf');
+
+  // Prefer the JSONC demo file (it may contain comments) and fall back to the
+  // plain JSON one so existing checkouts keep working.
+  const candidates = ['demo-resume.jsonc', 'demo-resume.json'];
+  const dataPath = candidates
+    .map(name => path.join(__dirname, name))
+    .find(file => fs.existsSync(file));
+
+  if (!dataPath) {
+    console.log(`No demo data file found in ${__dirname} (expected ${candidates.join(' or ')}).`);
+    return;
+  }
+
+  const masterData = parseJsonc(fs.readFileSync(dataPath, 'utf-8'), path.basename(dataPath));
+  // Resolve relative image paths against the data file, not the current
+  // working directory, so the photo is found from any directory.
+  await generatePDF(masterData, 'resume.pdf', { baseDir: __dirname });
 }
 
 // Only self-run when executed directly, so importing generatePDF from cli.js
 // does not trigger an extra PDF build.
 const isDirectRun = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isDirectRun) {
-  main().catch(console.error);
+  main().catch(err => {
+    console.error(err && err.message ? err.message : err);
+    process.exitCode = 1;
+  });
 }

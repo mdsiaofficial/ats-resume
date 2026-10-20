@@ -7,7 +7,8 @@
   "bin": "./cli.js",
   "scripts": {
     "start": "node cli.js",
-    "generate": "node index.js"
+    "generate": "node index.js",
+    "test": "node --test test/"
   },
   "keywords": ["resume", "pdf", "ats", "cv", "generator", "resume-generator"],
   "author": "Md Shoriful Islam Ashiq <ashiq@midgen.ai>",
