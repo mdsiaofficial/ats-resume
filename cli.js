@@ -96,11 +96,7 @@ async function main() {
       await generatePDF(data, outputPath, { baseDir: dirname(filePath) });
       console.log(`Created ${data.personalInfo.nickname}-resume.pdf successfully!`);
     } catch (err) {
-      if (err.code === 'ERR_BROWSER_NOT_FOUND') {
-        console.error(`Error: ${err.message}`);
-      } else {
-        console.error(`Error: Failed to generate PDF - ${err.message}`);
-      }
+      console.error(`Error: Failed to generate PDF - ${err.message}`);
       process.exitCode = 1;
     }
     return;

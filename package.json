@@ -1,11 +1,14 @@
 {
   "name": "ats-resume",
-  "version": "1.2.1",
-  "description": "Generate ATS-friendly PDF resumes from JSON data with customizable templates",
+  "version": "1.3.0",
+  "description": "Generate ATS-friendly PDF resumes from JSON data with a pure-JavaScript renderer",
   "main": "index.js",
   "type": "module",
   "bin": {
     "ats-resume": "cli.js"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "scripts": {
     "start": "node cli.js",
@@ -31,7 +34,6 @@
   },
   "homepage": "https://github.com/mdsiaofficial/ats-resume#readme",
   "dependencies": {
-    "handlebars": "^4.7.9",
-    "puppeteer-core": "^25.16.0"
+    "pdfmake": "^0.3.13"
   }
 }

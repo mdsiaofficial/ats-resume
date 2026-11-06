@@ -14,29 +14,12 @@ CLI tool to generate ATS-friendly PDF resumes from JSON/JSONC data
 npm install -g ats-resume
 ```
 
-### Browser requirement
+### Requirements
 
-ats-resume renders the PDF with an installed Chromium-based browser: Google
-Chrome, Microsoft Edge, Chromium, or Brave. No browser is downloaded during
-installation.
-
-The browser is detected automatically in the usual install locations and on
-`PATH`. If it is not found, point to it explicitly with
-`PUPPETEER_EXECUTABLE_PATH` (or `CHROME_PATH`):
-
-Windows (PowerShell):
-
-```powershell
-$env:PUPPETEER_EXECUTABLE_PATH = "C:\Program Files\Google\Chrome\Application\chrome.exe"
-ats-resume --create
-```
-
-macOS/Linux:
-
-```bash
-export PUPPETEER_EXECUTABLE_PATH="/usr/bin/google-chrome"
-ats-resume --create
-```
+- Node.js 18 or newer.
+- No browser or headless Chrome is required. PDFs are rendered entirely in
+  JavaScript with [`pdfmake`](https://pdfmake.github.io/docs/), and the Poppins
+  fonts are bundled with the package.
 
 ## Usage
 
@@ -117,8 +100,8 @@ problem.
 ## Features
 
 - Generate ATS-friendly PDF resumes from JSON/JSONC data
-- Uses your installed Chrome, Edge, Chromium, or Brave browser (no browser download)
-- Customizable templates with Handlebars
+- Pure-JavaScript PDF rendering with `pdfmake` (no browser download)
+- Bundled Poppins fonts for consistent output offline
 - Demo JSONC generation for quick start
 - Support for custom JSON/JSONC input files
 - Comments in the data file
@@ -141,7 +124,8 @@ Add an optional `image` field to `personalInfo` in your data file:
 ```
 
 - Accepts a local path (relative to the data file, or absolute), an `https://` URL, or a `data:` URI.
-- Supported formats: `.png`, `.jpg`, `.jpeg`, `.webp`, `.gif`, `.svg`.
+- Supported formats: `.png`, `.jpg`, `.jpeg`, and `.svg`. `.webp` and `.gif`
+  are skipped with a warning because PDF cannot embed them directly.
 - The photo is rendered in the top-right corner, and the contact details wrap into two rows to fit.
 - Local files are inlined into the PDF, so the resume can still be built from another working directory.
 - Omit the field (or set it to `""`) for the original single-row header layout.
@@ -152,13 +136,12 @@ Add an optional `image` field to `personalInfo` in your data file:
 
 | Value | Result |
 | --- | --- |
-| `square` | Hard-edged rectangle (96×96) |
+| `square` | Hard-edged rectangle (96×116) |
 | `rounded` | Rectangle with soft 8px corners |
 | `circle` | Circular crop, slightly larger at 104×104 to read well |
 
 - Optional. Omit it and the default `circle` is used; an unrecognised value also falls back to `circle` without warning.
 - Common synonyms are accepted (`round`/`oval` → `circle`, `rect`/`rectangle` → `square`) and matching is case- and whitespace-insensitive.
-- Only `circle` crops the image; `square` and `rounded` fill the full frame.
 
 ## License
 
