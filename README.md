@@ -14,6 +14,30 @@ CLI tool to generate ATS-friendly PDF resumes from JSON/JSONC data
 npm install -g ats-resume
 ```
 
+### Browser requirement
+
+ats-resume renders the PDF with an installed Chromium-based browser: Google
+Chrome, Microsoft Edge, Chromium, or Brave. No browser is downloaded during
+installation.
+
+The browser is detected automatically in the usual install locations and on
+`PATH`. If it is not found, point to it explicitly with
+`PUPPETEER_EXECUTABLE_PATH` (or `CHROME_PATH`):
+
+Windows (PowerShell):
+
+```powershell
+$env:PUPPETEER_EXECUTABLE_PATH = "C:\Program Files\Google\Chrome\Application\chrome.exe"
+ats-resume --create
+```
+
+macOS/Linux:
+
+```bash
+export PUPPETEER_EXECUTABLE_PATH="/usr/bin/google-chrome"
+ats-resume --create
+```
+
 ## Usage
 
 ```bash
@@ -93,6 +117,7 @@ problem.
 ## Features
 
 - Generate ATS-friendly PDF resumes from JSON/JSONC data
+- Uses your installed Chrome, Edge, Chromium, or Brave browser (no browser download)
 - Customizable templates with Handlebars
 - Demo JSONC generation for quick start
 - Support for custom JSON/JSONC input files

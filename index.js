@@ -1,10 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer-core';
 import Handlebars from 'handlebars';
 import { parseJsonc } from './jsonc.js';
 import { validateResumeData, formatValidationIssues } from './validate.js';
+import { findBrowserExecutable } from './browser.js';
 
 // Handlebars already HTML-escapes every `{{ }}` interpolation, so pre-escaping
 // here would double-encode output (`&` -> `&amp;` -> `&amp;amp;`). Values are
@@ -324,7 +325,22 @@ export async function generatePDF(data, outputPath, options = {}) {
   const compiledTemplate = Handlebars.compile(templateHtml);
   const html = compiledTemplate(resumeContent);
 
+  // puppeteer-core has no bundled browser, so use the installed Chrome/Edge
+  // (or whatever PUPPETEER_EXECUTABLE_PATH points at).
+  const browserInfo = options.executablePath
+    ? { name: 'custom', path: options.executablePath }
+    : findBrowserExecutable();
+
+  if (!browserInfo) {
+    const error = new Error(
+      'No Chrome, Edge, Chromium, or Brave browser was found. Install one, or set PUPPETEER_EXECUTABLE_PATH to the browser executable.'
+    );
+    error.code = 'ERR_BROWSER_NOT_FOUND';
+    throw error;
+  }
+
   const browser = await puppeteer.launch({
+    executablePath: browserInfo.path,
     headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });

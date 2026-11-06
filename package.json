@@ -1,6 +1,6 @@
 {
   "name": "ats-resume",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Generate ATS-friendly PDF resumes from JSON data with customizable templates",
   "main": "index.js",
   "type": "module",
@@ -20,7 +20,7 @@
     "generator",
     "resume-generator"
   ],
-  "author": "Md Shoriful Islam Ashiq <ashiq@midgen.ai>",
+  "author": "Md Shoriful Islam Ashiq <ashiq@midgenlabs.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -32,6 +32,6 @@
   "homepage": "https://github.com/mdsiaofficial/ats-resume#readme",
   "dependencies": {
     "handlebars": "^4.7.9",
-    "puppeteer": "^25.9.0"
+    "puppeteer-core": "^25.16.0"
   }
 }
