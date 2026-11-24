@@ -34,54 +34,6 @@
   },
   "summary_portfolio": "Software Engineer passionate about building production-ready applications, scaling systems, and driving business growth through technology and clean engineering practices.",
   "summary_resume": "Software Engineer with experience building scalable web applications using React, Next.js, and Node.js. Passionate about clean code, system design, and continuous learning. Adept at collaborating with cross-functional teams to deliver enterprise solutions.",
-  "experience": [
-    // Work experience. Set "show_resume": false on an entry to hide it from the PDF.
-    {
-      "show_portfolio": true,
-      "show_resume": true,
-      "company": "Nexora Labs",
-      "title": "Software Engineer",
-      "location": "Sylhet, Bangladesh",
-      "startDate": "November 2024",
-      "current": true,
-      "website": "https://nexoralabs.dev",
-      "bullets": [
-        "Contributing to DevOps implementation and deployments.",
-        "Building production-ready applications using React, Next.js, and MySQL.",
-        "Collaborating with cross-functional teams to deliver enterprise solutions."
-      ],
-      "technologies": [
-        "React",
-        "Next.js",
-        "MySQL",
-        "DevOps"
-      ],
-      "image": "https://placehold.co/64x64/png?text=Nexora",
-      "impact": "Contributed to the DevOps implementation deployments along with the development of production-ready applications"
-    },
-    {
-      "show_portfolio": true,
-      "show_resume": true,
-      "company": "PixelForge Studio",
-      "title": "Internship Trainee",
-      "location": "Remote",
-      "startDate": "September 2024",
-      "endDate": "October 2024",
-      "current": false,
-      "website": "https://pixelforge.dev",
-      "bullets": [
-        "Learning JavaScript/Node-based frontend development.",
-        "Backend development and basic structure for maintaining production-ready applications."
-      ],
-      "technologies": [
-        "JavaScript",
-        "Node.js",
-        "React"
-      ],
-      "image": "https://placehold.co/64x64/png?text=Nexora",
-      "impact": "Contributed to the development of production-ready applications using React, Node.js."
-    }
-  ],
   "education": [
     // Education entries. Set "show_resume": false on an entry to hide it from the PDF.
     {
@@ -130,89 +82,6 @@
       ]
     }
   ],
-  "certifications": [
-    // Certifications. Set "show_resume": false on an entry to hide it from the PDF.
-    {
-      "show_portfolio": true,
-      "show_resume": true,
-      "name": "Front-End Developer Professional Certificate",
-      "issuer": "Coursera",
-      "issueDate": "Aug 2023",
-      "logo": "https://placehold.co/64x64/png?text=Coursera",
-      "certificate": "https://placehold.co/600x400/png?text=Certificate"
-    }
-  ],
-  "projects": [
-    // Projects. Set "show_resume": false on an entry to hide it from the PDF.
-    {
-      "show_portfolio": true,
-      "show_resume": true,
-      "name": "BookHive",
-      "role": "Full Stack Developer",
-      "bullets": [
-        "Full-stack e-commerce application with admin dashboard.",
-        "Cart functionality and payment integration with Stripe."
-      ],
-      "technologies": [
-        "React",
-        "Node.js",
-        "Express",
-        "MongoDB",
-        "Stripe"
-      ],
-      "startDate": "2024",
-      "link": "https://bookhive.example.com",
-      "github": "https://github.com/fatemajannat/bookhive",
-      "image": "https://placehold.co/600x400/png?text=BookHive",
-      "featured": true
-    },
-    {
-      "show_portfolio": true,
-      "show_resume": true,
-      "name": "Personal Portfolio",
-      "role": "Solo Developer",
-      "bullets": [
-        "Modern portfolio website showcasing projects, experience, and skills.",
-        "Responsive design with smooth animations."
-      ],
-      "technologies": [
-        "Next.js",
-        "TypeScript",
-        "Tailwind CSS",
-        "Framer Motion"
-      ],
-      "startDate": "2024",
-      "link": "https://fatemajannat.dev",
-      "github": "https://github.com/fatemajannat/portfolio",
-      "image": "https://placehold.co/600x400/png?text=Portfolio",
-      "featured": true
-    }
-  ],
-  "achievements": [
-    // Achievements and awards. Set "show_resume": false on an entry to hide it from the PDF.
-    {
-      "show_portfolio": true,
-      "show_resume": true,
-      "title": "ACM ICPC 2025",
-      "issuer": "ICPC Foundation",
-      "date": "Oct 2025",
-      "location": "Sylhet Institute of Science and Technology",
-      "description": "The International Collegiate Programming Contest for college students.",
-      "logo": "https://placehold.co/64x64/png?text=ICPC",
-      "certificate": "https://placehold.co/600x400/png?text=ICPC+Certificate"
-    },
-    {
-      "show_portfolio": true,
-      "show_resume": true,
-      "title": "Meta Hacker Cup 2024",
-      "issuer": "Meta",
-      "date": "Oct 2024",
-      "location": "Meta Coding Competitions",
-      "description": "Meta's annual open programming competition.",
-      "logo": "https://placehold.co/64x64/png?text=Meta",
-      "certificate": "https://placehold.co/600x400/png?text=Meta+Certificate"
-    }
-  ],
   "volunteerExperience": [
     // Volunteer experience. Set "show_resume": false on an entry to hide it from the PDF.
     {
@@ -253,49 +122,6 @@
       "show_resume": true,
       "language": "English",
       "proficiency": "Professional Working"
-    }
-  ],
-  "professionalAffiliations": [
-    // Professional affiliations. Set "show_resume": false on an entry to hide it from the PDF.
-    {
-      "show_portfolio": true,
-      "show_resume": true,
-      "organization": "BASIS Student Forum Sylhet Chapter (Bangladesh Association of Software and Information Services)",
-      "role": "Co-Convenor",
-      "startDate": "2024",
-      "current": true,
-      "website": "https://basis.example.com/"
-    }
-  ],
-  "publications": [
-    // Publications. Set "show_resume": false on an entry to hide it from the PDF.
-    {
-      "show_portfolio": true,
-      "show_resume": true,
-      "title": "Building Scalable Web Applications with Next.js and MongoDB",
-      "publisher": "Medium",
-      "date": "2025",
-      "url": "https://medium.com/@fatemajannat",
-      "description": "A comprehensive guide on building production-ready applications using modern web technologies."
-    }
-  ],
-  "references": [
-    // References. Set "show_resume": false on an entry to hide it from the PDF.
-    {
-      "show_portfolio": true,
-      "show_resume": true,
-      "name": "Farhana Yasmin",
-      "relationship": "Assistant Professor",
-      "company": "Sylhet Institute of Science and Technology",
-      "email": "farhana.yasmin@example.com"
-    },
-    {
-      "show_portfolio": true,
-      "show_resume": true,
-      "name": "Imran Hossain",
-      "relationship": "Technical Lead",
-      "company": "Nexora Labs",
-      "email": "imran.hossain@example.com"
     }
   ],
   "socialLinks": {
