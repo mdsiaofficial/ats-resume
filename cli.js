@@ -187,7 +187,10 @@ async function main() {
   process.exitCode = 1;
 }
 
-main().catch(err => {
-  console.error(`Error: ${err && err.message ? err.message : err}`);
-  process.exitCode = 1;
-});
+const isDirectRun = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isDirectRun) {
+  main().catch(err => {
+    console.error(`Error: ${err && err.message ? err.message : err}`);
+    process.exitCode = 1;
+  });
+}
