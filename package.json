@@ -1,6 +1,6 @@
 {
   "name": "ats-resume",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Generate ATS-friendly PDF resumes from JSON data with a pure-JavaScript renderer",
   "main": "index.js",
   "type": "module",
