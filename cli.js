@@ -3,9 +3,10 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
+import readline from 'readline';
 import { masterData } from './data.js';
 import { parseJsonc } from './jsonc.js';
-import { buildTemplate } from './template-jsonc.js';
+import { buildTemplate, AVAILABLE_SECTIONS, filterDataBySections } from './template-jsonc.js';
 import { validateResumeData, formatValidationIssues } from './validate.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -17,16 +18,82 @@ function showUsage() {
   console.log(`Usage: ats-resume [options]
 
 Options:
-  --json                 Create ${DEMO_FILE} with maximum possible information
+  --json                 Create ${DEMO_FILE} interactively (select sections)
+  --json --all           Create ${DEMO_FILE} with all possible sections
   --create [jsonFile]    Generate PDF from JSON/JSONC file (defaults to ${DEMO_FILE})
 
 Examples:
-  ats-resume --json              Create the template JSONC file
+  ats-resume --json              Create the template JSONC file interactively
+  ats-resume --json --all        Create the template JSONC file with all sections
   ats-resume --create my-resume.jsonc   Generate PDF from custom JSON/JSONC file
 
 Notes:
   The data file may be .json or .jsonc. JSONC files may contain // and /* */ comments
   and trailing commas.`);
+}
+
+/**
+ * Interactively prompts the user to select which sections to include.
+ * Returns an array of selected section keys.
+ *
+ * @param {readline.Interface} [customRl]
+ * @returns {Promise<string[]>}
+ */
+export async function promptSectionSelection(customRl = null) {
+  const rl = customRl || readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  const shouldClose = !customRl;
+
+  try {
+    console.log('\nSelect sections to include in your resume JSONC file:');
+    console.log('(Note: Personal Info is always included as it is required)\n');
+
+    AVAILABLE_SECTIONS.forEach((sec, idx) => {
+      console.log(`  [${idx + 1}] ${sec.label}`);
+    });
+    console.log(`  [a] All sections`);
+    console.log('');
+
+    const answer = await new Promise((resolve) => {
+      rl.question('Enter section numbers separated by commas or spaces (or "a" for all) [default: all]: ', (ans) => {
+        resolve(ans.trim());
+      });
+    });
+
+    if (!answer || answer.toLowerCase() === 'a' || answer.toLowerCase() === 'all') {
+      return AVAILABLE_SECTIONS.map(s => s.key);
+    }
+
+    // Parse selections (can be separated by commas, spaces, or tabs)
+    const tokens = answer.split(/[\s,]+/).filter(Boolean);
+    const selectedIndices = new Set();
+
+    for (const token of tokens) {
+      if (token.toLowerCase() === 'a' || token.toLowerCase() === 'all') {
+        return AVAILABLE_SECTIONS.map(s => s.key);
+      }
+      const num = parseInt(token, 10);
+      if (!isNaN(num) && num >= 1 && num <= AVAILABLE_SECTIONS.length) {
+        selectedIndices.add(num - 1);
+      } else {
+        console.warn(`Warning: Ignoring unrecognized choice "${token}".`);
+      }
+    }
+
+    if (selectedIndices.size === 0) {
+      console.log('No valid sections selected; defaulting to all sections.');
+      return AVAILABLE_SECTIONS.map(s => s.key);
+    }
+
+    return Array.from(selectedIndices).map(idx => AVAILABLE_SECTIONS[idx].key);
+  } finally {
+    if (shouldClose) {
+      rl.close();
+    }
+  }
 }
 
 async function main() {
@@ -38,16 +105,29 @@ async function main() {
   }
 
   if (args[0] === '--json') {
-    if (args.length > 1 && args[1].startsWith('-')) {
-      showUsage();
-      console.error(`Error: Unknown option '${args[1]}'.`);
-      process.exitCode = 1;
-      return;
+    let selectedKeys = null;
+
+    if (args.length > 1) {
+      if (args[1] === '--all') {
+        selectedKeys = null; // keep all sections
+      } else {
+        showUsage();
+        console.error(`Error: Unknown option '${args[1]}'.`);
+        process.exitCode = 1;
+        return;
+      }
+    } else {
+      // If running in an interactive terminal, prompt the user.
+      // If stdin is not a TTY (e.g. piped or automated script), default to all sections.
+      if (process.stdin.isTTY) {
+        selectedKeys = await promptSectionSelection();
+      }
     }
 
+    const filteredData = filterDataBySections(masterData, selectedKeys);
     const outputPath = resolve(process.cwd(), DEMO_FILE);
-    writeFileSync(outputPath, buildTemplate(masterData));
-    console.log(`Created ${DEMO_FILE} with maximum possible information. Comments are supported - edit with your details and delete sections you don't need.`);
+    writeFileSync(outputPath, buildTemplate(filteredData));
+    console.log(`\nCreated ${DEMO_FILE} successfully! Comments are supported - edit with your details.`);
     return;
   }
 

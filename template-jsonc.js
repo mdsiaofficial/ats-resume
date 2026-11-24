@@ -8,7 +8,7 @@
 const HEADER_COMMENT = [
   'Resume data for ats-resume.',
   '',
-  'This file contains every possible resume field - delete the sections you do not need.',
+  'This file contains resume fields tailored to your profile.',
   'Comments are allowed: use // for a line comment, /* ... */ for a block comment,',
   'and trailing commas are permitted.',
   '',
@@ -130,6 +130,54 @@ export function injectComments(jsonText) {
 
   output.push(...lines.slice(cursor));
   return output.join('\n');
+}
+
+/**
+ * Available selectable sections for interactive filtering.
+ * Each entry has a key corresponding to the property in resume data and a human-readable label.
+ */
+export const AVAILABLE_SECTIONS = [
+  { key: 'summary_resume', label: 'Summary' },
+  { key: 'experience', label: 'Work Experience' },
+  { key: 'education', label: 'Education' },
+  { key: 'skills', label: 'Skills' },
+  { key: 'projects', label: 'Projects' },
+  { key: 'certifications', label: 'Certifications' },
+  { key: 'achievements', label: 'Achievements' },
+  { key: 'volunteerExperience', label: 'Volunteer Experience' },
+  { key: 'languages', label: 'Languages' },
+  { key: 'professionalAffiliations', label: 'Professional Affiliations' },
+  { key: 'publications', label: 'Publications' },
+  { key: 'references', label: 'References' },
+  { key: 'socialLinks', label: 'Social Links' }
+];
+
+/**
+ * Filters the data object to keep personalInfo plus only the requested section keys.
+ * If selectedKeys is null or undefined, returns the original data object.
+ *
+ * @param {object} data
+ * @param {string[]|null} [selectedKeys]
+ * @returns {object}
+ */
+export function filterDataBySections(data, selectedKeys) {
+  if (!selectedKeys) return data;
+  const set = new Set(selectedKeys);
+  const result = {};
+
+  for (const [key, value] of Object.entries(data)) {
+    // personalInfo is essential and always included
+    if (key === 'personalInfo') {
+      result[key] = value;
+    } else if (key === 'summary_portfolio' && set.has('summary_resume')) {
+      // Keep portfolio summary along with resume summary if summary was selected
+      result[key] = value;
+    } else if (set.has(key)) {
+      result[key] = value;
+    }
+  }
+
+  return result;
 }
 
 /**

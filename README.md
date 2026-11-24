@@ -24,7 +24,8 @@ npm install -g ats-resume
 ## Usage
 
 ```bash
-ats-resume --json                 # Create resume.jsonc template
+ats-resume --json                 # Create resume.jsonc template interactively (select sections)
+ats-resume --json --all           # Create resume.jsonc template with all sections
 ats-resume --create               # Generate PDF from the demo data file
 ats-resume --create custom.jsonc  # Generate PDF from a custom data file
 ```
